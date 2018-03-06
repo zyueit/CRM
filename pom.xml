@@ -17,6 +17,10 @@
             <email>15972352024@163.com</email>
             <timezone>8</timezone>
         </developer>
+		<developer>
+            <id>eonw</id>
+            <name>eonw</name>
+        </developer>
     </developers>
 
     <properties>
