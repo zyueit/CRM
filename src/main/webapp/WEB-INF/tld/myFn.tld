@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+
+    <description>CRM Taglib</description>
+    <display-name>CRM functions</display-name>
+    <tlib-version>1.0</tlib-version>
+    <short-name>myFn</short-name>
+    <uri>http://zyueit.com/java/crm</uri>
+
+    <function>
+        <description>
+            检验是否具有某一权限
+        </description>
+        <name>checkPermission</name>
+        <function-class>eon.util.PermissionUtil</function-class>
+        <function-signature>boolean checkPermission(java.lang.String)</function-signature>
+        <example>
+            &lt;c:if test="${myFn:checkPermission(expression)}">
+        </example>
+    </function>
+</taglib>
