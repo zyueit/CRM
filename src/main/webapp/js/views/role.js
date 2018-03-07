@@ -21,7 +21,7 @@ $(function () {
         remoteSort: false,
         toolbar: '#role_datagrid_btn',
         onClickRow: function (rowIndex, rowData) {
-            //员工信息的编辑和离职按钮控制
+            //角色的编辑和禁用按钮控制
             if (rowData.state) {
                 roleEdit.linkbutton("enable");
                 roleRemove.linkbutton("enable");
