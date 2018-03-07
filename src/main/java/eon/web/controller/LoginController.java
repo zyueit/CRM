@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/user")
@@ -55,7 +52,14 @@ public class LoginController {
             session.setAttribute(UserContext.PERMISSION_IN_SESSION, set);
             //将用户菜单加载到session中
             List<Menu> menus = menuService.queryRootMenus();
-            PermissionUtil.checkPermissionFORMenu(menus);
+            //判断是否拥有子菜单权限---检查子菜单权限之后判断根菜单是否还有子菜单---没有子菜单时删除根菜单
+            for (Menu menu : menus) {
+                List<Menu> children = menu.getChildren();
+                PermissionUtil.checkPermissionFORMenu(children);
+                if (children.size() == 0) {
+                    menus.remove(menu);
+                }
+            }
             session.setAttribute(UserContext.MENUS_IN_SESSION, menus);
             result = new AjaxResult(true, "登陆成功！");
         } else {

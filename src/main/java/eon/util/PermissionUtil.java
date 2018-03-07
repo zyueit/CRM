@@ -43,10 +43,10 @@ public class PermissionUtil {
     public static void checkPermissionFORMenu(List<Menu> menus) {
         for (Iterator<Menu> it = menus.iterator(); it.hasNext(); ) {
             Menu menu = it.next();
-            if (!checkPermission(menu.getResource())) {
-                it.remove();
-            } else {
+            if (checkPermission(menu.getResource())) {
                 checkPermissionFORMenu(menu.getChildren());
+            } else {
+                it.remove();
             }
         }
     }
