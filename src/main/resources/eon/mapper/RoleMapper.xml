@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eon.mapper.RoleMapper">
+    <insert id="save" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO role (sn,name,state) VALUES (#{sn},#{name},#{state})
+    </insert>
+
+    <update id="update">
+        UPDATE role SET sn = #{sn},name = #{name} WHERE id = #{id} AND state = true
+    </update>
+
+    <insert id="handleRelationToSave">
+        INSERT INTO role_permission (role_id,permission_id) VALUES (#{rid},#{pid})
+    </insert>
+
+    <delete id="handleRelationToDelete">
+        DELETE FROM role_permission WHERE role_id = #{rid}
+    </delete>
+
+    <select id="list" resultType="Role">
+        SELECT * FROM role WHERE state = true
+    </select>
+
+    <select id="selectCountByCondition" resultType="long">
+        SELECT COUNT(*) FROM role
+    </select>
+
+    <resultMap id="getPermissionName" type="Role">
+        <id column="id" property="id"/>
+        <result column="sn" property="sn"/>
+        <result column="name" property="name"/>
+        <result column="state" property="state"/>
+        <collection property="permissions" columnPrefix="permission_" ofType="Permission">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectPageByCondition" resultMap="getPermissionName">
+        SELECT r.*,p.id permission_id,p.name permission_name
+        FROM role r LEFT JOIN role_permission rp ON rp.role_id = r.id LEFT JOIN permission p ON p.id = rp.permission_id
+        <if test="rows > 0">
+            LIMIT #{startIndex},#{rows}
+        </if>
+    </select>
+
+    <update id="disable">
+        UPDATE role SET state = false WHERE id = #{rid}
+    </update>
+
+    <delete id="handleRelationToDeleteForEmp">
+        DELETE FROM employee_role WHERE role_id = #{rid}
+    </delete>
+</mapper>

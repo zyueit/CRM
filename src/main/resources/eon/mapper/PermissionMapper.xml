@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eon.mapper.PermissionMapper">
+    <insert id="save" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO permission (name,resource) VALUES (#{name},#{resource})
+    </insert>
+
+    <select id="list" resultType="Permission">
+        SELECT * FROM permission
+    </select>
+
+    <delete id="delete">
+        DELETE FROM permission WHERE id = #{id}
+    </delete>
+
+    <select id="selectCountByCondition" resultType="long">
+        SELECT COUNT(*) FROM permission
+    </select>
+
+    <select id="selectPageByCondition" resultType="Permission">
+        SELECT * FROM permission
+        <if test="rows > 0">
+            LIMIT #{startIndex},#{rows}
+        </if>
+    </select>
+
+    <select id="queryByExp" resultType="Permission">
+        SELECT * FROM permission WHERE resource = #{expression}
+    </select>
+
+    <select id="queryByEmp" resultType="Permission">
+        SELECT p.* FROM employee_role er LEFT JOIN role_permission rp ON rp.role_id = er.role_id
+        LEFT JOIN permission p ON p.id = rp.permission_id WHERE employee_id = #{eid}
+    </select>
+</mapper>
