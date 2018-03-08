@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eon.mapper.SystemDictionaryItemMapper">
+    <select id="queryByPid" resultType="SystemDictionaryItem">
+        SELECT * FROM systemdictionaryitem WHERE parent_id = #{pid}
+    </select>
+
+    <insert id="save" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO systemdictionaryitem (name,intro,parent_id) VALUES (#{name},#{intro},#{parent.id})
+    </insert>
+
+    <update id="update">
+        UPDATE systemdictionaryitem SET name = #{name},intro = #{intro} WHERE id = #{id}
+    </update>
+</mapper>

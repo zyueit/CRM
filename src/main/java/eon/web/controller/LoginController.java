@@ -53,11 +53,11 @@ public class LoginController {
             //将用户菜单加载到session中
             List<Menu> menus = menuService.queryRootMenus();
             //判断是否拥有子菜单权限---检查子菜单权限之后判断根菜单是否还有子菜单---没有子菜单时删除根菜单
-            for (Menu menu : menus) {
-                List<Menu> children = menu.getChildren();
+            for (Iterator<Menu> it = menus.iterator(); it.hasNext(); ) {
+                List<Menu> children = it.next().getChildren();
                 PermissionUtil.checkPermissionFORMenu(children);
                 if (children.size() == 0) {
-                    menus.remove(menu);
+                    it.remove();
                 }
             }
             session.setAttribute(UserContext.MENUS_IN_SESSION, menus);

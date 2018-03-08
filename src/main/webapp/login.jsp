@@ -21,8 +21,8 @@
     <div class="login">
         <h1>用户登录</h1>
         <form method="post">
-            <p><input type="text" name="username" value="" placeholder="账号"></p>
-            <p><input type="password" name="password" value="" placeholder="密码"></p>
+            <p><input type="text" name="username" value="ming" placeholder="账号"></p>
+            <p><input type="password" name="password" value="1" placeholder="密码"></p>
             <p class="submit">
                 <input type="button" value="登录" onclick="subForm()">
                 <input type="button" value="重置" onclick="resetForm()">
