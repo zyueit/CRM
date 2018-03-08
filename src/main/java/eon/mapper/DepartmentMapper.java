@@ -16,4 +16,6 @@ public interface DepartmentMapper {
     void disable(Long id);
 
     void handleRelationToDelete(Long id);
+
+
 }

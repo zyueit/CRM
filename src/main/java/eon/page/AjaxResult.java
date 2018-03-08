@@ -17,4 +17,5 @@ public class AjaxResult {
         this.success = success;
         this.msg = msg;
     }
+
 }

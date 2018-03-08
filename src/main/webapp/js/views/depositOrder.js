@@ -1,230 +1,388 @@
 $(function () {
-    var roleDatagrid = $("#role_datagrid");
-    var roleEdit = $("#roleEdit");
-    var roleRemove = $("#roleRemove");
-    var roleDialog = $("#role_dialog");
-    var dialogForm = $("#dialog_form");
-    var selfPermission = $("#selfPermission");
-    var allPermission = $("#allPermission");
+    var datagird = $("#depositOrder_datagrid");
+    var button = $("#depositOrder_button");
+    var dialog = $("#depositOrder_dialog");
+    var dialog_form = $("#dialog_form");
+    var sellerCombox = $("input[name='seller.id']");
+    var search_form = $("#search_form");
 
-    //数据表格初始化
-    roleDatagrid.datagrid({
-        title: '角色管理',
-        url: '/role_selectByCondition',
-        fit: true,
-        rownumbers: true,
-        pagination: true,
-        fitColumns: true,
-        loadMsg: '正在努力加载中...',
+    datagird.datagrid({
+        url: '/depositOrder_query',
+        title: '定金订单管理',
         singleSelect: true,
+        rownumbers: true,
+        fit: true,
+        fitColumns: true,
+        pagination: true,
+        loadMsg: '正在努力加载...',
         pageList: [1, 5, 10, 20],
-        remoteSort: false,
-        toolbar: '#role_datagrid_btn',
-        onClickRow: function (rowIndex, rowData) {
-            //员工信息的编辑和离职按钮控制
-            if (rowData.state) {
-                roleEdit.linkbutton("enable");
-                roleRemove.linkbutton("enable");
+        onClickRow: function (row, data) {
+            var edit = $("a").get(1);
+            var mydelete = $("a").get(2);
+
+            if (data.status != "0") {
+                $(edit).linkbutton("disable");
+                $(mydelete).linkbutton("disable");
             } else {
-                roleEdit.linkbutton("disable");
-                roleRemove.linkbutton("disable");
+                $(edit).linkbutton("enable");
+                $(mydelete).linkbutton("enable");
             }
+
+            // /*控制财务审批按钮*/
+            // var num = data.statusOfFinance;
+            // if (num == 0 || num == 2) {
+            //     $(approveByFinance).linkbutton("disable");
+            // }
+            // else if (num == 1) {
+            //     $(approveByFinance).linkbutton("enable");
+            // }
+
         },
         columns: [[
             {
-                title: '角色编码',
-                field: 'sn',
+                title: '定金客户',
+                field: 'customer',
                 align: 'center',
-                width: 1
-            }, {
-                title: '角色名称',
-                field: 'name',
+                width: 10
+            },
+            {
+                title: '签订时间',
+                field: 'signTime',
                 align: 'center',
-                width: 1
-            }, {
-                title: '权限',
-                field: 'permissionsName',
+                width: 10
+            },
+            {
+                title: '营销人员',
+                field: 'seller',
                 align: 'center',
-                width: 1
-            }, {
-                title: '状态',
-                field: 'state',
-                formatter: function (value) {
-                    if (value) {
-                        return '<span style="color: green;">正常</span>';
-                    } else {
-                        return '<span style="color: red;">禁用</span>';
-                    }
-                },
-                align: 'center',
-                width: 1
+                width: 10,
+                formatter: employeeFormatter
+            },
+            {
+                title: '总金额',
+                field:
+                    'totalSum',
+                align:
+                    'center',
+                width:
+                    10
             }
-        ]]
+            ,
+            {
+                title: '定金金额',
+                field:
+                    'sum',
+                align:
+                    'center',
+                width:
+                    10
+            }
+            ,
+            {
+                title: '摘要',
+                field:
+                    'intro',
+                align:
+                    'center',
+                width:
+                    10
+            }
+            ,
+            {
+                title: '附件',
+                field:
+                    'file',
+                align:
+                    'center',
+                width:
+                    10
+            }
+            ,
+            {
+                title: '最近修改人',
+                field:
+                    'modifyUser',
+                align:
+                    'center',
+                width:
+                    10,
+                formatter: employeeFormatter
+            }
+            ,
+            {
+                title: '最近修改时间',
+                field:
+                    'modifyTime',
+                align:
+                    'center',
+                width:
+                    10
+            }
+            ,
+            {
+                title: '订单状态',
+                field:
+                    'status',
+                align:
+                    'center',
+                width:
+                    10,
+                formatter: statusFormatter
+            }
+            // ,
+            // {
+            //     title: '定金状态',
+            //     field:
+            //         'statusOfFinance',
+            //     align:
+            //         'center',
+            //     width:
+            //         10,
+            //     formatter: statusOfFinanceFormatter
+            // }
+            // ,
+        ]],
+        toolbar: button
     });
-    //新增/编辑对话框初始化
-    roleDialog.dialog({
-        width: 600,
-        height: 400,
+
+
+    dialog.dialog({
+        //新增/编辑对话框初始化
+        width: 300,
+        height: 300,
         top: 200,
         modal: true,
         closed: true,
         doSize: true,
-        buttons: '#role_dialog_btn'
+        buttons: '#depositOrder_dialog_button'
     });
-    //拥有的权限的数据表格初始化
-    selfPermission.datagrid({
-        title: '已分配权限',
-        width: 220,
-        height: 250,
-        rownumbers: true,
-        fitColumns: true,
-        singleSelect: true,
-        onDblClickRow: function (rowIndex) {
-            selfPermission.datagrid("deleteRow", rowIndex);
-        },
-        columns: [[
-            {
-                title: '权限名称',
-                field: 'name',
-                align: 'center',
-                width: 1
-            }
-        ]]
-    });
-    //所有的权限的数据表格初始化
-    allPermission.datagrid({
-        title: '所有权限',
-        width: 220,
-        height: 250,
-        url: '/permission_selectByCondition',
-        rownumbers: true,
-        pagination: true,
-        fitColumns: true,
-        loadMsg: '正在努力加载中...',
-        singleSelect: true,
-        onDblClickRow: function (rowIndex, rowData) {
-            var rows = selfPermission.datagrid("getRows");
-            var eq = false;
-            for (var index = 0; index < rows.length; index++) {
-                if (rowData.id == rows[index].id) {
-                    eq = true;
-                    break;
-                }
-            }
-            if (eq) {
-                selfPermission.datagrid("selectRow", index);
-            } else {
-                selfPermission.datagrid("appendRow", rowData);
-            }
-        },
-        columns: [[
-            {
-                title: '权限名称',
-                field: 'name',
-                align: 'center',
-                width: 1
-            }
-        ]]
-    });
-    //设置所有权限表格的分页条的部分信息不显示
-    allPermission.datagrid("getPager").pagination({
-        showPageList: false,
-        showRefresh: false,
-        displayMsg: ''
-    });
-    //操作方法集中管理
-    var cmdObj = {
-        /** 角色新增 */
-        add: function () {
-            //dialogForm.form("clear");
-            $("[name='sn'],[name='name'],[name='id']").val("");
-            selfPermission.datagrid("loadData", {rows: []});
-            allPermission.datagrid("unselectAll");
-            roleDialog.dialog("open");
-            roleDialog.dialog("setTitle", "新增角色");
-        },
-        /** 角色编辑 */
-        edit: function () {
-            var select = roleDatagrid.datagrid("getSelected");
-            if (select) {
-                //dialogForm.form("clear");
-                $("[name='sn'],[name='name'],[name='id']").val("");
-                selfPermission.datagrid("loadData", {rows: []});
-                allPermission.datagrid("unselectAll");
-                roleDialog.dialog("open");
-                roleDialog.dialog("setTitle", "编辑角色");
-                if (select.permissions.length) {
-                    select.rows = select.permissions;
-                    selfPermission.datagrid("loadData", select)
-                }
-                dialogForm.form("load", select);
-            } else {
-                $.messager.alert("温馨提示", "请选择要编辑的角色！");
-            }
-        },
-        /** 禁用角色 */
-        del: function () {
-            var select = roleDatagrid.datagrid("getSelected");
-            if (select) {
-                $.messager.confirm("温馨提示", "您确定要禁用该角色吗？", function (bool) {
-                    if (bool) {
-                        $.post("/role_disable", {id: select.id}, function (data) {
-                            if (data.success) {
-                                $.messager.alert("温馨提示", data.msg);
-                                roleDatagrid.datagrid("reload");
-                            } else {
-                                $.messager.alert("温馨提示", data.msg);
-                            }
-                        });
-                    }
-                });
-            } else {
-                $.messager.alert("温馨提示", "请选择要禁用的角色！");
-            }
-        },
-        /** 刷新 */
-        refresh: function () {
-            roleDatagrid.datagrid("reload");
-        },
-        /** 保存或更新 */
+
+    // sellerCombox.combobox({
+    //     url: "/employee_getEmployee",
+    //     valueField: 'id',
+    //     textField: 'realName'
+    // });
+
+
+//    方法集中管理
+    var cdmObj = {
+        /*定金订单新增*/
         save: function () {
-            var url;
-            var eid = $("#dialog_form :input[name=id]").val();
-            if (eid) {
-                url = "/role_update";
-            } else {
-                url = "/role_save";
+            dialog_form.form("clear");
+            dialog.dialog("open");
+            dialog.dialog("setTitle", "新增定金订单");
+        },
+        /*定金订单编辑*/
+        edit: function () {
+            dialog_form.form("clear");
+            var select = datagird.datagrid("getSelected");
+            if (select) {
+                if (select.seller.id) {
+                    select['seller.id'] = select.seller.id;
+                }
+                dialog_form.form("load", select);
+                dialog.dialog("open");
+                dialog.dialog("setTitle", "编辑定金订单");
             }
-            dialogForm.form("submit", {
+            else {
+                $.messager.alert("温馨提示", "请选择要编辑的信息！");
+            }
+        },
+        /*定金订单审批*/
+        approve: function () {
+            var select = datagird.datagrid("getSelected");
+            if (select) {
+                if (select.status == "0") {
+                    $.messager.confirm("温馨提示", "是否通过审批？", function (ok) {
+                        if (ok) {
+                            $.ajax({
+                                url: "/depositOrder_approve?id=" + select.id,
+                                type: "get",
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data.success) {
+                                        $.messager.alert("温馨提示", data.msg)
+                                        datagird.datagrid("reload");
+                                    } else {
+                                        $.messager.alert(data.msg)
+                                    }
+                                }
+                            });
+                        }
+                    })
+                } else if (select.status == "2") {
+                    $.messager.alert("温馨提示", "此订单已退款！");
+                }
+            } else {
+                $.messager.alert("温馨提示", "请选择要审批的订单！");
+            }
+        },
+        /*定金订单部门审批*/
+        approveDept: function () {
+            var select = datagird.datagrid("getSelected");
+            if (select) {
+                if (select.status == "1") {
+                    $.messager.confirm("温馨提示", "是否通过审批？", function (ok) {
+                        if (ok) {
+                            $.ajax({
+                                url: "/depositOrder_approveByDept?id=" + select.id,
+                                type: "get",
+                                dataType: "json",
+                                success: function (data) {
+                                    if (data.success) {
+                                        $.messager.alert("温馨提示", data.msg)
+                                        datagird.datagrid("reload");
+                                    } else {
+                                        $.messager.alert(data.msg)
+                                    }
+                                }
+                            });
+                        }
+                    })
+                } else if (select.status == "2") {
+                    $.messager.alert("温馨提示", "此订单已退款！");
+                }
+            } else {
+                $.messager.alert("温馨提示", "请选择要审批的订单！");
+            }
+        },
+        /*定金订单财务审批*/
+        approveByFinance: function () {
+            var select = datagird.datagrid("getSelected");
+            if (select) {
+                if (select.statusOfFinance == "1") {
+                    $.messager.alert("温馨提示", "此功能还未开放！");
+                    // $.messager.confirm("温馨提示", "是否通过审批？", function (ok) {
+                    //     if (ok) {
+                    //         $.ajax({
+                    //             url: "/depositOrder_approveByFinance?id=" + select.id,
+                    //             type: "get",
+                    //             dataType: "json",
+                    //             success: function (data) {
+                    //                 if (data.success) {
+                    //                     $.messager.alert("温馨提示", data.msg)
+                    //                     datagird.datagrid("reload");
+                    //                 } else {
+                    //                     $.messager.alert(data.msg)
+                    //                 }
+                    //             }
+                    //         });
+                    //     }
+                    // })
+                }
+                else if (select.status == "2") {
+                    $.messager.alert("温馨提示", "此订单已退款！");
+                }
+            } else {
+                $.messager.alert("温馨提示", "请选择要审批的订单！");
+            }
+        },
+        /*定金订单刷新*/
+        refresh: function () {
+            datagird.datagrid("reload");
+        },
+        /*定金订单删除*/
+        delete: function () {
+            var select = datagird.datagrid("getSelected");
+            $.messager.confirm("温馨提示", "是否要删除该订单记录？", function (ok) {
+                if (ok) {
+                    $.ajax({
+                        url: "/depositOrder_delete?id=" + select.id,
+                        type: "get",
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.success) {
+                                $.messager.alert("温馨提示", data.msg)
+                                datagird.datagrid("reload");
+                            } else {
+                                $.messager.alert(data.msg)
+                            }
+                        }
+                    });
+                }
+            });
+        },
+        /*对话框提交*/
+        commit: function () {
+            var url;
+            var did = $("#dialog_form :input[name=id]").val();
+            if (did) {
+                url = "/depositOrder_update";
+            } else {
+                url = "/depositOrder_save";
+            }
+            dialog_form.form("submit", {
                 url: url,
-                onSubmit: function (param) {
-                    var rows = selfPermission.datagrid("getRows");
-                    for (var index = 0; index < rows.length; index++) {
-                        param["permissions[" + index + "].id"] = rows[index].id;
-                    }
-                },
-                success: function (dataStr) {
-                    var data = $.parseJSON(dataStr);
+                success: function (data) {
+                    var data = $.parseJSON(data);
                     if (data.success) {
                         $.messager.alert("温馨提示", data.msg);
-                        roleDialog.dialog("close");
-                        roleDatagrid.datagrid("reload");
+                        dialog.dialog("close");
+                        datagird.datagrid("reload");
                     } else {
                         $.messager.alert("温馨提示", data.msg);
                     }
                 }
-            });
+            })
         },
-        /** 取消 */
+        /*对话框取消*/
         cancel: function () {
-            roleDialog.dialog("close");
+            dialog.dialog({
+                closed: true
+            })
+        },
+        /*因为使用submit方法会使page与rows丢失,要对高级查询表单的处理*/
+        querySearch: function () {
+            var paramArr = search_form.serializeArray();
+            var param = {};
+            for (var index = 0; index < paramArr.length; index++) {
+                param[paramArr[index].name] = paramArr[index].value;
+            }
+            datagird.datagrid("load", param);
         }
-    };
-    //为所有按钮绑定单击事件
-    $("a").on('click', function () {
-        var cmd = $(this).data('cmd');
+    }
+
+
+//    给所有标签绑定同一事件
+    $("a").on("click", function () {
+        var cmd = $(this).data("cmd");
         if (cmd) {
-            cmdObj[cmd]();
+            cdmObj[cmd]();
         }
     });
 });
+
+//有关员工信息显示的格式器
+function employeeFormatter(value) {
+    if (value) {
+        return value.realName;
+    } else {
+        return "-";
+    }
+}
+
+//有关状态显示的格式器
+function statusFormatter(value) {
+    if (value == "1") {
+        return '<span style="color: blue">部门主管未审批</span>';
+    } else if (value == "0") {
+        return '<span style="color:  red">初始录入</span>';
+    } else if (value == "2") {
+        return '已退款';
+    } else if (value == "3") {
+        return '<span style="color:  green">已出合同</span>';
+    }
+}
+
+function statusOfFinanceFormatter(value) {
+    if (value == "2") {
+        return '<span style="color: green">已到账</span>';
+    } else if (value == "1") {
+        return '<span style="color:  red">未到账</span>';
+    } else if (value == "0") {
+        return "-";
+    }
+
+}
+
+

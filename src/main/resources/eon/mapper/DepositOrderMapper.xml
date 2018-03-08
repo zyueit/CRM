@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eon.mapper.DepositOrderMapper">
+
+    <resultMap id="getDepositOrder" type="DepositOrder">
+        <id column="id" property="id"/>
+        <result column="signTime" property="signTime"/>
+        <result column="statusOfFinance" property="statusOfFinance"/>
+        <result column="totalSum" property="totalSum"/>
+        <result column="sum" property="sum"/>
+        <result column="intro" property="intro"/>
+        <result column="file" property="file"/>
+        <result column="createTime" property="createTime"/>
+        <result column="modifyTime" property="modifyTime"/>
+        <result column="status" property="status"/>
+        <!--使用急切加载-->
+        <!--<association column="seller" property="seller" select="eon.mapper.EmployeeMapper.get" fetchType="eager"/>-->
+        <!--应为高级查询需要用到员工方的字段,所以必须要连表查询-->
+        <association property="seller" javaType="Employee">
+            <result property="realName" column="realName"/>
+        </association>
+        <association column="modifyUser" property="modifyUser" select="eon.mapper.EmployeeMapper.get"
+                     fetchType="eager"/>
+    </resultMap>
+
+    <!--sql-->
+    <sql id="search">
+        <where>
+            <if test="keyword != null">
+                AND realName LIKE concat("%",#{keyword},"%")
+            </if>
+            <if test="beginTime != null">
+                AND modifyTime > #{beginTime}
+            </if>
+            <if test="endTime != null">
+                AND modifyTime &lt; #{endTime}
+            </if>
+            <if test="status >= 0">
+                AND status = #{status}
+            </if>
+        </where>
+    </sql>
+
+
+    <insert id="save" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+      INSERT INTO DepositOrder (signTime,seller,totalSum,sum,intro,file,createTime,modifyUser,modifyTime,status,statusOfFinance)
+      VALUES
+      (#{signTime},#{seller.id},#{totalSum},#{sum},#{intro},#{file},#{createTime},#{modifyUser.id},#{modifyTime},${0},${0});
+    </insert>
+
+    <update id="update">
+        UPDATE DepositOrder
+        SET
+        seller = #{seller.id},totalSum = #{totalSum},sum = #{sum},intro = #{intro},
+        file = #{file},modifyUser = #{modifyUser.id},modifyTime = #{modifyTime}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE  FROM DepositOrder  WHERE id = #{id}
+    </delete>
+
+
+    <select id="get" resultMap="getDepositOrder">
+        SELECT * FROM DepositOrder WHERE id = #{id}
+    </select>
+
+    <select id="list" resultType="DepositOrder">
+        SELECT id,realName FROM DepositOrder
+    </select>
+
+    <select id="queryCount" resultType="Long">
+        select count(*)
+        from depositOrder d left join employee e on d.seller = e.id
+        <include refid="search"/>
+    </select>
+
+    <select id="query" resultMap="getDepositOrder">
+        select d.*,e.realName
+        from depositOrder d left join employee e on d.seller = e.id
+        <include refid="search"/>
+        <if test="rows > 0">
+            LIMIT #{startIndex},#{rows}
+        </if>
+    </select>
+
+    <!--订单审核-->
+    <update id="approve">
+        UPDATE DepositOrder SET signTime = #{signTime},status = ${1},statusOfFinance = ${1} WHERE ID = #{id}
+    </update>
+
+    <!--部门对订单的审核-->
+    <update id="approveByDept">
+        UPDATE DepositOrder SET status = ${3},statusOfFinance = ${1} WHERE ID = #{id}
+    </update>
+
+    <!--财务对订单的审批-->
+    <update id="approveByFinance">
+        UPDATE DepositOrder SET statusOfFinance = ${2} WHERE id = #{id}
+    </update>
+
+</mapper>

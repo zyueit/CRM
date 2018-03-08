@@ -87,6 +87,7 @@
         </if>
     </select>
 
+
     <select id="listForDept" resultType="Employee">
         SELECT id,realName FROM employee WHERE state = true
     </select>
@@ -97,5 +98,18 @@
 
     <select id="queryLoginId" resultType="String">
         SELECT loginId FROM employee WHERE id = #{id}
+    </select>
+
+    <resultMap id="getEmployee" type="Employee">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="realName" property="realName"/>
+        <result column="password" property="password"/>
+        <result column="tel" property="tel"/>
+        <result column="email" property="email"/>
+    </resultMap>
+
+    <select id="get" resultMap="getEmployee">
+        SELECT * FROM Employee WHERE id = #{id}
     </select>
 </mapper>

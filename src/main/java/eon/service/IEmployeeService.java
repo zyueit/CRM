@@ -22,4 +22,5 @@ public interface IEmployeeService {
     void saveLoginIdForEmp(Long id, String loginId);
 
     String queryLoginId(Long id);
+
 }
