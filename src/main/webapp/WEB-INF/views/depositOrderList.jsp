@@ -50,7 +50,7 @@
 </div>
 
 <div id="depositOrder_dialog">
-    <form id="dialog_form" method="post">
+    <form id="dialog_form" method="post" enctype="multipart/form-data">
         <table style="margin-top:20px;padding-left: 30px;">
             <%--用于区分跟新操作和保存操作--%>
             <input type="hidden" name="id">
@@ -74,7 +74,7 @@
             </tr>
             <tr>
                 <td>附&emsp;&emsp;件</td>
-                <td><input name="file"></td>
+                <td><input id="filebox" class="easyui-filebox" name="myfile" buttontext="浏览"></td>
             </tr>
         </table>
     </form>

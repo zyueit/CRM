@@ -12,12 +12,10 @@ import java.util.Date;
 @Getter
 @Setter
 public class DepositOrder {
-
     private static final Integer ONE = 1;//已审核,部门主管未审核
     private static final Integer TWO = 2;//已退款
     private static final Integer ZERO = 0;//初始录入
     private static final Integer FOUR = 3;//已出合同
-
     private Long id;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private Date signTime;
@@ -31,12 +29,9 @@ public class DepositOrder {
     private Date createTime;
     //定金状态
     private Integer statusOfFinance; // 0 无需显示 1 等待定金 2 定金已到账
-
-
-    //客户的站位
+    //客户的站位*******************************
     private Employee seller;
     private Employee modifyUser;
-
     @Override
     public String toString() {
         return "DepositOrder{" +

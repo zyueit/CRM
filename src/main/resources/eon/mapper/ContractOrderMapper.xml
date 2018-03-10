@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eon.mapper.ContractOrderMapper">
+
+    <insert id="save" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+            INSERT INTO contractOrder (sn) VALUES (#{sn})
+    </insert>
+
+    <select id="getOne" resultType="ContractOrder">
+        SELECT * FROM ContractOrder WHERE id = #{id}
+    </select>
+
+    <select id="getAll" resultType="ContractOrder">
+        SELECT * FROM ContractOrder
+    </select>
+
+    <update id="update">
+        UPDATE ContractOrder SET sn = #{sn} WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM ContractOrder WHERE id = #{id}
+    </delete>
+
+    <!--<sql id="querySql">-->
+    <!--<where>-->
+    <!--<if-->
+    <!--</where>-->
+    <!--</sql>-->
+
+    <select id="queryCount" resultType="long">
+        SELECT count(*) FROM ContractOrder
+    </select>
+
+    <select id="query" resultType="ContractOrder">
+        SELECT * FROM ContractOrder
+        limit #{startIndex},#{rows}
+    </select>
+
+
+</mapper>

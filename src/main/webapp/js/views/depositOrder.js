@@ -5,6 +5,7 @@ $(function () {
     var dialog_form = $("#dialog_form");
     var sellerCombox = $("input[name='seller.id']");
     var search_form = $("#search_form");
+    var filebox = $("#filebox");
 
     datagird.datagrid({
         url: '/depositOrder_query',
@@ -180,6 +181,9 @@ $(function () {
                 if (select.seller.id) {
                     select['seller.id'] = select.seller.id;
                 }
+                // if (select.file) {
+                //     filebox.filebox("setValue", select.file)
+                // }
                 dialog_form.form("load", select);
                 dialog.dialog("open");
                 dialog.dialog("setTitle", "编辑定金订单");
@@ -241,6 +245,8 @@ $(function () {
                     })
                 } else if (select.status == "2") {
                     $.messager.alert("温馨提示", "此订单已退款！");
+                } else if (select.status == "0") {
+                    $.messager.alert("温馨提示", "请先审批！");
                 }
             } else {
                 $.messager.alert("温馨提示", "请选择要审批的订单！");
@@ -314,6 +320,7 @@ $(function () {
             dialog_form.form("submit", {
                 url: url,
                 success: function (data) {
+                    console.debug(data)
                     var data = $.parseJSON(data);
                     if (data.success) {
                         $.messager.alert("温馨提示", data.msg);
@@ -321,6 +328,8 @@ $(function () {
                         datagird.datagrid("reload");
                     } else {
                         $.messager.alert("温馨提示", data.msg);
+                        0
+
                     }
                 }
             })
@@ -350,6 +359,9 @@ $(function () {
             cdmObj[cmd]();
         }
     });
+filebox.on("change",function () {
+    alert(1)
+});
 });
 
 //有关员工信息显示的格式器

@@ -6,18 +6,20 @@ import eon.page.AjaxResult;
 import eon.page.PageResult;
 import eon.query.DepositOrderQueryObject;
 import eon.service.IDepositOrderService;
+import eon.util.FileUtil;
 import eon.util.RequiredPermission;
 import eon.util.UserContext;
-import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
 @Controller
 public class DepositOrderController {
@@ -39,7 +41,18 @@ public class DepositOrderController {
 
     @RequestMapping("/depositOrder_update")
     @ResponseBody
-    public AjaxResult update(DepositOrder depositOrder, HttpSession session) {
+    public AjaxResult update(DepositOrder depositOrder, HttpSession session, MultipartFile myfile) throws IOException {
+        String fileName = myfile.getOriginalFilename();
+        File file = FileUtil.storeFile(myfile, depositOrder, fileName);
+
+        //先查询此订单是否已经有附件
+        DepositOrder search = depositOrderService.get(depositOrder.getId());
+        //有附件就把原来的附件删除
+        if (search.getFile() != null && !"".equals(search.getFile().trim())) {
+            File oldFile = new File(search.getFile());
+            oldFile.delete();
+        }
+
         try {
             depositOrder.setModifyUser((Employee) session.getAttribute(UserContext.USER_IN_SESSION));
             depositOrder.setModifyTime(new Date());
@@ -50,9 +63,16 @@ public class DepositOrderController {
         }
     }
 
+
     @RequestMapping("/depositOrder_save")
     @ResponseBody
-    public AjaxResult save(DepositOrder depositOrder, HttpSession session) {
+    public AjaxResult save(DepositOrder depositOrder, MultipartFile myfile, HttpServletRequest request) throws
+            IOException {
+        String fileName = myfile.getOriginalFilename();
+        FileUtil.storeFile(myfile, depositOrder, fileName);
+
+
+        HttpSession session = request.getSession();
         //当前客户端操作用户
         Employee user = (Employee) session.getAttribute(UserContext.USER_IN_SESSION);
         //当前客户端时间
@@ -110,6 +130,13 @@ public class DepositOrderController {
     @RequestMapping("/depositOrder_delete")
     @ResponseBody
     public AjaxResult delete(Long id) {
+        //先查询此订单是否已经有附件
+        DepositOrder search = depositOrderService.get(id);
+        //有附件就把原来的附件删除
+        if (search.getFile() != null && !"".equals(search.getFile().trim())) {
+            File oldFile = new File(search.getFile());
+            oldFile.delete();
+        }
         try {
             depositOrderService.delete(id);
             return new AjaxResult(true, "删除成功！");

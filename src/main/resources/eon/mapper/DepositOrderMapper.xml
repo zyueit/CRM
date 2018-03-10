@@ -53,7 +53,7 @@
     <update id="update">
         UPDATE DepositOrder
         SET
-        seller = #{seller.id},totalSum = #{totalSum},sum = #{sum},intro = #{intro},
+        totalSum = #{totalSum},sum = #{sum},intro = #{intro},
         file = #{file},modifyUser = #{modifyUser.id},modifyTime = #{modifyTime}
         WHERE id = #{id}
     </update>
