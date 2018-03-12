@@ -21,5 +21,7 @@ public interface ContractOrderMapper {
 
     Long queryCount(ContractOrderQueryObejct qo);
 
+    void approve(ContractOrder contractOrder);
 
+    void approveByDept(ContractOrder contractOrder);
 }

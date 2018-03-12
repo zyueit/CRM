@@ -298,10 +298,10 @@ $(function () {
                         dataType: "json",
                         success: function (data) {
                             if (data.success) {
-                                $.messager.alert("温馨提示", data.msg)
+                                $.messager.alert("温馨提示", data.msg);
                                 datagird.datagrid("reload");
                             } else {
-                                $.messager.alert(data.msg)
+                                $.messager.alert("温馨提示", data.msg);
                             }
                         }
                     });
@@ -320,7 +320,6 @@ $(function () {
             dialog_form.form("submit", {
                 url: url,
                 success: function (data) {
-                    console.debug(data)
                     var data = $.parseJSON(data);
                     if (data.success) {
                         $.messager.alert("温馨提示", data.msg);
@@ -328,8 +327,6 @@ $(function () {
                         datagird.datagrid("reload");
                     } else {
                         $.messager.alert("温馨提示", data.msg);
-                        0
-
                     }
                 }
             })
@@ -359,9 +356,9 @@ $(function () {
             cdmObj[cmd]();
         }
     });
-filebox.on("change",function () {
-    alert(1)
-});
+    filebox.on("change", function () {
+        alert(1)
+    });
 });
 
 //有关员工信息显示的格式器

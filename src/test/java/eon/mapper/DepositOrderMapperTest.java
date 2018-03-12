@@ -36,7 +36,7 @@ public class DepositOrderMapperTest {
         depositOrderQueryObject.setPage(2);
         depositOrderQueryObject.setRows(1);
         List<DepositOrder> query = depositOrderMapper.query(depositOrderQueryObject);
-        System.out.println(query);
+        System.out.println(query.get(0).getSeller());
     }
 
     @Test

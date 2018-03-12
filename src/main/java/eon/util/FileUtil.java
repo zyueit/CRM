@@ -1,6 +1,7 @@
 package eon.util;
 
 import eon.domain.DepositOrder;
+import eon.domain.Employee;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -71,17 +72,17 @@ public class FileUtil {
         return map;
     }
 
-    public static File storeFile(MultipartFile myfile, DepositOrder depositOrder, String fileName) throws IOException {
+    public static String storeFile(MultipartFile myfile, String fileName) throws IOException {
+        Employee employee = (Employee) UserContext.getRequest().getSession().getAttribute(UserContext.USER_IN_SESSION);
         File file;
-        if (fileName != null && !"".equals(fileName.trim())) {
-            file = new File("E:\\CRM_BY_TEAM\\CRM\\src\\main\\webapp\\WEB-INF\\contract", new Date().getTime() + fileName);
+        if (!StringUtil.isbank(fileName)) {
+            file = new File("E:\\CRM_BY_TEAM\\CRM\\src\\main\\webapp\\WEB-INF\\contract\\" + employee.getUsername(), new Date().getTime() + fileName);
             if (!file.getParentFile().exists()) {
                 file.getParentFile().mkdirs();
             }
             myfile.transferTo(file);
             String path = file.getPath();
-            depositOrder.setFile(path);
-            return file;
+            return path;
         }
         return null;
     }

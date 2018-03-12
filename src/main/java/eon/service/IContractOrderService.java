@@ -20,4 +20,7 @@ public interface IContractOrderService {
 
     PageResult<ContractOrder> query(ContractOrderQueryObejct qo);
 
+    void approve(ContractOrder contractOrder);
+
+    void approveByDept(ContractOrder contractOrder);
 }

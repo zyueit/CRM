@@ -42,4 +42,19 @@ public class Employee {
         sb.deleteCharAt(sb.length() - 1).append("]");
         return sb.toString();
     }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", realName='" + realName + '\'' +
+                ", password='" + password + '\'' +
+                ", tel='" + tel + '\'' +
+                ", email='" + email + '\'' +
+                ", inputTime=" + inputTime +
+                ", state=" + state +
+                ", admin=" + admin +
+                '}';
+    }
 }

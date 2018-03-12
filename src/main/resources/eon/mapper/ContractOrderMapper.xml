@@ -4,8 +4,33 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="eon.mapper.ContractOrderMapper">
 
+    <resultMap id="getContract" type="ContractOrder">
+        <id column="id" property="id"/>
+        <result column="sn" property="sn"/>
+        <result column="signTime" property="signTime"/>
+        <result column="money" property="money"/>
+        <result column="sum" property="sum"/>
+        <result column="intro" property="intro"/>
+        <result column="file" property="file"/>
+        <result column="payTime" property="payTime"/>
+        <result column="modifyTime" property="modifyTime"/>
+        <result column="status" property="status"/>
+        <!--使用急切加载-->
+        <!--<association column="seller" property="seller" select="eon.mapper.EmployeeMapper.get" fetchType="eager"/>-->
+        <!--应为高级查询需要用到员工方的字段,所以必须要连表查询-->
+        <association property="seller" javaType="Employee">
+            <result property="realName" column="realName"/>
+        </association>
+        <association column="modifyUser_id" property="modifyUser" select="eon.mapper.EmployeeMapper.get"
+                     fetchType="eager"/>
+
+    </resultMap>
+
     <insert id="save" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
-            INSERT INTO contractOrder (sn) VALUES (#{sn})
+            INSERT INTO
+            contractOrder (sn,modifyUser_id,file,modifyTime,seller_id,intro,status,sum,money)
+            VALUES
+            (#{sn},#{modifyUser.id},#{file},#{modifyTime},#{seller.id},#{intro},${0},#{sum},#{money})
     </insert>
 
     <select id="getOne" resultType="ContractOrder">
@@ -17,27 +42,51 @@
     </select>
 
     <update id="update">
-        UPDATE ContractOrder SET sn = #{sn} WHERE id = #{id}
+        UPDATE ContractOrder SET modifyUser_id = #{modifyUser.id},modifyTime = #{modifyTime},file = #{file},sum = #{sum},money = #{money},intro = #{intro} WHERE id = #{id}
     </update>
 
     <delete id="delete">
         DELETE FROM ContractOrder WHERE id = #{id}
     </delete>
 
-    <!--<sql id="querySql">-->
-    <!--<where>-->
-    <!--<if-->
-    <!--</where>-->
-    <!--</sql>-->
+
+    <sql id="querySql">
+        <where>
+            <if test="keyword != null">
+                AND realName LIKE concat("%",#{keyword},"%")
+            </if>
+            <if test="beginTime != null">
+                AND modifyTime >= #{beginTime}
+            </if>
+            <if test="endTime != null">
+                AND modifyTime &lt;= #{endTime}
+            </if>
+            <if test="status >= 0">
+                AND status = #{status}
+            </if>
+        </where>
+    </sql>
 
     <select id="queryCount" resultType="long">
-        SELECT count(*) FROM ContractOrder
+        SELECT count(*) FROM ContractOrder d left join employee e on d.seller_id = e.id
+        <include refid="querySql"/>
     </select>
 
-    <select id="query" resultType="ContractOrder">
-        SELECT * FROM ContractOrder
+    <select id="query" resultMap="getContract">
+        SELECT * FROM ContractOrder d left join employee e on d.seller_id = e.id
+        <include refid="querySql"/>
         limit #{startIndex},#{rows}
     </select>
+
+    <!--审核-->
+    <update id="approve">
+        UPDATE ContractOrder SET status = ${1},signTime = #{signTime} where id = #{id}
+    </update>
+
+    <!--部门审核-->
+    <update id="approveByDept">
+        UPDATE ContractOrder SET status = ${3},signTime = #{signTime} where id = #{id}
+    </update>
 
 
 </mapper>

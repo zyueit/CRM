@@ -48,4 +48,14 @@ public class ContractOrderService implements IContractOrderService {
         }
         return new PageResult<ContractOrder>(count, contractOrderMapper.query(qo));
     }
+
+    @Override
+    public void approve(ContractOrder contractOrder) {
+        contractOrderMapper.approve(contractOrder);
+    }
+
+    @Override
+    public void approveByDept(ContractOrder contractOrder) {
+        contractOrderMapper.approveByDept(contractOrder);
+    }
 }

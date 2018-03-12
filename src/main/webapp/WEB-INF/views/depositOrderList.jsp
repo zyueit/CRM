@@ -54,8 +54,6 @@
         <table style="margin-top:20px;padding-left: 30px;">
             <%--用于区分跟新操作和保存操作--%>
             <input type="hidden" name="id">
-            <%--传递营销人员id--%>
-            <input type="hidden" name="seller.id">
             <tr>
                 <td>定金客户</td>
                 <td><input name="" readonly="true"></td>

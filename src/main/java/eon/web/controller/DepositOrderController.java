@@ -1,5 +1,6 @@
 package eon.web.controller;
 
+import eon.domain.ContractOrder;
 import eon.domain.DepositOrder;
 import eon.domain.Employee;
 import eon.page.AjaxResult;
@@ -8,6 +9,7 @@ import eon.query.DepositOrderQueryObject;
 import eon.service.IDepositOrderService;
 import eon.util.FileUtil;
 import eon.util.RequiredPermission;
+import eon.util.StringUtil;
 import eon.util.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,16 +45,26 @@ public class DepositOrderController {
     @ResponseBody
     public AjaxResult update(DepositOrder depositOrder, HttpSession session, MultipartFile myfile) throws IOException {
         String fileName = myfile.getOriginalFilename();
-        File file = FileUtil.storeFile(myfile, depositOrder, fileName);
-
-        //先查询此订单是否已经有附件
-        DepositOrder search = depositOrderService.get(depositOrder.getId());
-        //有附件就把原来的附件删除
-        if (search.getFile() != null && !"".equals(search.getFile().trim())) {
-            File oldFile = new File(search.getFile());
-            oldFile.delete();
+        if (!StringUtil.isbank(fileName)) {
+            String path = FileUtil.storeFile(myfile, fileName);
+            if (!StringUtil.isbank(path)) {
+                depositOrder.setFile(path);
+            }
+            //先查询此订单是否已经有附件
+            DepositOrder search = depositOrderService.get(depositOrder.getId());
+            //有附件就把原来的附件删除
+            if (!StringUtil.isbank(search.getFile())) {
+                File oldFile = new File(search.getFile());
+                oldFile.delete();
+            }
+        } else {
+            //先查询此订单是否已经有附件
+            DepositOrder search = depositOrderService.get(depositOrder.getId());
+            String file = search.getFile();
+            if (!StringUtil.isbank(file)) {
+                depositOrder.setFile(file);
+            }
         }
-
         try {
             depositOrder.setModifyUser((Employee) session.getAttribute(UserContext.USER_IN_SESSION));
             depositOrder.setModifyTime(new Date());
@@ -69,9 +81,10 @@ public class DepositOrderController {
     public AjaxResult save(DepositOrder depositOrder, MultipartFile myfile, HttpServletRequest request) throws
             IOException {
         String fileName = myfile.getOriginalFilename();
-        FileUtil.storeFile(myfile, depositOrder, fileName);
-
-
+        String path = FileUtil.storeFile(myfile, fileName);
+        if (!StringUtil.isbank(path)) {
+            depositOrder.setFile(path);
+        }
         HttpSession session = request.getSession();
         //当前客户端操作用户
         Employee user = (Employee) session.getAttribute(UserContext.USER_IN_SESSION);

@@ -1,5 +1,6 @@
 package eon.query;
 
+import eon.util.StringUtil;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -18,5 +19,7 @@ public class DepositOrderQueryObject extends QueryObject {
     /*默认的状态为全部,integer不初始化默认为0*/
     private Integer status = -1;
 
-
+    public String getKeyword() {
+        return !StringUtil.isbank(keyword) ? keyword : null;
+    }
 }
