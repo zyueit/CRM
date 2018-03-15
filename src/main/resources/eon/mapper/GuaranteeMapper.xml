@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eon.mapper.GuaranteeMapper">
+
+    <resultMap id="guaranteeMap" type="Guarantee">
+        <id column="id" property="id"/>
+        <result column="sn" property="sn"/>
+        <result column="productName" property="productName"/>
+        <result column="dueTime" property="dueTime"/>
+        <result column="remark" property="remark"/>
+        <!--急切加载-->
+        <collection property="guaranteeItems" ofType="GuaranteeItem" column="id"
+                    select="eon.mapper.GuaranteeItemMapper.selectByGuaranteeId" fetchType="eager"/>
+    </resultMap>
+
+
+    <insert id="save" keyColumn="id" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Guarantee (id,sn,dueTime) VALUES (#{id},#{sn},#{dueTime})
+    </insert>
+
+    <sql id="query">
+
+    </sql>
+
+    <select id="query" resultMap="guaranteeMap">
+        SELECT * FROM Guarantee
+        <if test="rows > 0">
+            LIMIT #{startIndex},#{rows}
+        </if>
+    </select>
+
+    <select id="queryCount" resultType="long">
+        SELECT count(*) FROM Guarantee
+    </select>
+
+    <select id="delete">
+        DELETE FROM guarantee WHERE id = #{id}
+    </select>
+</mapper>

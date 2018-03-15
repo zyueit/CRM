@@ -3,10 +3,12 @@ package eon.web.controller;
 import eon.domain.ContractOrder;
 import eon.domain.DepositOrder;
 import eon.domain.Employee;
+import eon.domain.Guarantee;
 import eon.page.AjaxResult;
 import eon.page.PageResult;
 import eon.query.ContractOrderQueryObejct;
 import eon.service.IContractOrderService;
+import eon.service.IGuaranteeService;
 import eon.util.FileUtil;
 import eon.util.StringUtil;
 import eon.util.UserContext;
@@ -103,13 +105,6 @@ public class ContractOrderController {
     @ResponseBody
     @RequestMapping("/contractOrder_delete")
     public AjaxResult delete(Long id) {
-        //先查询此订单是否已经有附件
-        ContractOrder search = contractOrderService.getOne(id);
-        //有附件就把原来的附件删除
-        if (search.getFile() != null && !"".equals(search.getFile().trim())) {
-            File oldFile = new File(search.getFile());
-            oldFile.delete();
-        }
         try {
             contractOrderService.delete(id);
             return new AjaxResult(true, "删除成功！");
