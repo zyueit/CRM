@@ -62,14 +62,14 @@
     <form id="dialog_form" method="post">
         <input type="hidden" name="id">
         <table style="margin-top:20px;padding-left: 30px;">
-            <tr>
-                <td>产品名称</td>
-                <td><input name="productName"></td>
-            </tr>
-            <tr>
-                <td>备&emsp;&emsp;注</td>
-                <td><input name="remark"></td>
-            </tr>
+                <tr style="line-height: 50px">
+                    <td>产品名称</td>
+                    <td><input name="productName"></td>
+                </tr>
+                <tr>
+                    <td>备&emsp;&emsp;注</td>
+                    <td><input name="remark"></td>
+                </tr>
         </table>
     </form>
 </div>

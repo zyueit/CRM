@@ -24,7 +24,7 @@
 
     </sql>
 
-    <select id="query" resultMap="guaranteeMap">
+    <select id="query" resultType="Guarantee">
         SELECT * FROM Guarantee
         <if test="rows > 0">
             LIMIT #{startIndex},#{rows}
@@ -38,4 +38,8 @@
     <select id="delete">
         DELETE FROM guarantee WHERE id = #{id}
     </select>
+
+    <update id="update">
+        UPDATE guarantee SET remark = #{remark},productName = #{productName} where id =#{id}
+    </update>
 </mapper>

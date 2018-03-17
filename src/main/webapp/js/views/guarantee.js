@@ -54,9 +54,8 @@ $(function () {
         width:
             300,
         height:
-            300
-    })
-    ;
+            200
+    });
 
 
     var btn = {
@@ -80,6 +79,20 @@ $(function () {
             } else {
                 $.messager.alert("温馨提示", "请选择要查询的保修单!");
             }
+        },
+        save: function () {
+            dialog_form.form("submit", {
+                url: "/guarantee_update", success: function (data) {
+                    data = $.parseJSON(data);
+                    if (data.success) {
+                        $.messager.alert("温馨提示", data.msg);
+                        dialog.dialog("close");
+                        datagird.datagrid("reload");
+                    } else {
+                        $.messager.alert("温馨提示", data.msg);
+                    }
+                }
+            });
         },
         cancel: function () {
             dialog.dialog("close")

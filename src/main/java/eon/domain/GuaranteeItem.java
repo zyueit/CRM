@@ -15,9 +15,12 @@ public class GuaranteeItem {
     private Long id;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date guaranteeTime;
+    private String remark;
 
 //    private String content;   客户对象
 
     private Boolean status;
     private Guarantee guarantee;//保修单对象
+
+
 }

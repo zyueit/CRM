@@ -13,4 +13,6 @@ public interface GuaranteeMapper {
     List<Guarantee> query(GuaranteeQueryObject qo);
 
     void delete(Long id);
+
+    void update(Guarantee guarantee);;
 }

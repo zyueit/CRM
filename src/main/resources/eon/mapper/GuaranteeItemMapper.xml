@@ -7,4 +7,16 @@
         select * from guaranteeItem where guarantee_id = #{id}
     </select>
 
+    <update id="update">
+        UPDATE guaranteeItem SET remark = #{remark} WHERE id = #{id}
+    </update>
+
+    <insert id="save" keyProperty="id" useGeneratedKeys="true" keyColumn="id">
+        INSERT INTO guaranteeItem (remark,guarantee_id,guaranteeTime) VALUES (#{remark},#{id},#{guaranteeTime})
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM guaranteeItem WHERE id = #{id}
+    </delete>
+
 </mapper>

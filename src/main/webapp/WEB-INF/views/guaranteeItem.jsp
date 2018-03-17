@@ -16,38 +16,58 @@
     <script type="text/javascript" src="/js/plugins/jquery-easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="/js/plugins/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="/js/plugins/jquery-easyui/base.js"></script>
-    <script type="text/javascript">
-        $(function () {
-            var url = document.URL;
-            var id = url.substr(url.length - 2, url.length);
-
-            var datagird = $("#datagird");
-            datagird.datagrid({
-                title: "保修单明细",
-                fitColumns: true,
-                fit: true,
-                columns: [[
-                    {field: "id", title: "编号", align: "center", width: 10},
-                    {field: "content", title: "保修内容", align: "center", width: 10},
-                    {field: "guaranteeTime", title: "保修时间", align: "center", width: 10},
-                    {field: "a", title: "保修费用", align: "center", width: 10},
-                    {field: "remark", title: "备注", align: "center", width: 10},
-                    {field: "status", title: "保修状态", align: "center", width: 10},
-                ]]
-            })
-
-            $.get("guaranteeItem?id=" + id, function (data) {
-                if (data.length == 0) {
-                    $.messager.alert("温馨提示", "此保修单没有保修明细！", "warning")
-                } else {
-                    datagird.datagrid({"data": data});
-                }
-            }, "json");
-        });
-    </script>
+    <script type="text/javascript" src="/js/views/guaranteeItem.js"></script>
 </head>
 <body>
 <table id="datagird" headerCls="Calendar-title"></table>
+
+<!-- datagrid工具栏按钮 -->
+<div id="datagird_btn">
+    <div style="display: inline-block">
+        <a class="easyui-linkbutton" iconCls="icon-save" plain="true" data-cmd="add">新增</a>
+        <a class="easyui-linkbutton" iconCls="icon-edit" plain="true" data-cmd="edit">编辑</a>
+        <a class="easyui-linkbutton" iconCls="icon-remove" plain="true" data-cmd="del">删除</a>
+        <a class="easyui-linkbutton" iconCls="icon-reload" plain="true" data-cmd="refresh">刷新</a>
+    </div>
+    <%--<div style="display: inline-block;float: right;margin-right: 20px;">--%>
+    <%--<form id="search_form">--%>
+    <%--关键字<input name="keyword">--%>
+    <%--入职时间<input name="beginTime" class="easyui-datebox">~<input name="endTime" class="easyui-datebox">--%>
+    <%--状态--%>
+    <%--<select name="state">--%>
+    <%--<option value="">全部</option>--%>
+    <%--<option value="1">在职</option>--%>
+    <%--<option value="0">离职</option>--%>
+    <%--</select>--%>
+    <%--<a class="easyui-linkbutton" iconCls="icon-search" data-cmd="querySearch">查询</a>--%>
+    <%--</form>--%>
+    <%--</div>--%>
+    <%--<div style="height: 5px;"></div>--%>
+</div>
+
+
+<!-- 定义添加/编辑对话框 -->
+<div id="dialog">
+    <form id="dialog_form" method="post">
+        <input type="hidden" name="id">
+        <table style="margin-top:20px;padding-left: 30px;">
+            <%--<tr style="line-height: 50px">--%>
+                <%--<td>产品名称</td>--%>
+                <%--<td><input name="productName"></td>--%>
+            <%--</tr>--%>
+            <tr>
+                <td>备&emsp;&emsp;注</td>
+                <td><input name="remark"></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<!-- 对话框的底部按钮 -->
+<div id="dialog_btn">
+    <a class="easyui-linkbutton" iconCls="icon-save" plain="true" data-cmd="save">确定</a>
+    <a class="easyui-linkbutton" iconCls="icon-cancel" plain="true" data-cmd="cancel">取消</a>
+</div>
 </table>
 </body>
 </html>

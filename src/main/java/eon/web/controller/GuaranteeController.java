@@ -29,6 +29,18 @@ public class GuaranteeController {
         return query;
     }
 
+    @RequestMapping("/guarantee_update")
+    @ResponseBody
+    public AjaxResult update(Guarantee guarantee) {
+        try {
+            guaranteeService.update(guarantee);
+            return new AjaxResult(true, "成功编辑!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new AjaxResult("更新异常,请联系管理员!");
+        }
+    }
+
 
 //    @RequestMapping("/guarantee_delete")
 //    @ResponseBody

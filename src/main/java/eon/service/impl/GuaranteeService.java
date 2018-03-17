@@ -42,4 +42,9 @@ public class GuaranteeService implements IGuaranteeService {
     public void delete(Long id) {
         guaranteeMapper.delete(id);
     }
+
+    @Override
+    public void update(Guarantee guarantee) {
+        guaranteeMapper.update(guarantee);
+    }
 }

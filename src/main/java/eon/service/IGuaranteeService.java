@@ -15,4 +15,6 @@ public interface IGuaranteeService {
 
     void delete(Long id);
 
+    void update(Guarantee guarantee);
+
 }
