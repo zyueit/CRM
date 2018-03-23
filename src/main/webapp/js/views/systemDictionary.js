@@ -22,17 +22,17 @@ $(function () {
             {
                 title: '字典编码',
                 field: 'sn',
-                width: 1,
+                width: 10,
                 align: 'center'
             }, {
                 title: '字典名称',
                 field: 'name',
-                width: 1,
+                width: 10,
                 align: 'center'
             }, {
                 title: '字典简介',
                 field: 'intro',
-                width: 1,
+                width: 10,
                 align: 'center'
             }
         ]]
@@ -53,12 +53,12 @@ $(function () {
             {
                 title: '字典明细名称',
                 field: 'name',
-                width: 1,
+                width: 10,
                 align: 'center'
             }, {
                 title: '字典明细简介',
                 field: 'intro',
-                width: 1,
+                width: 10,
                 align: 'center'
             }
         ]]

@@ -70,17 +70,13 @@
             <id column="id" property="id"/>
             <result column="name" property="name"/>
         </association>
-        <collection property="roles" columnPrefix="role_" ofType="Role">
-            <id column="id" property="id"/>
-            <result column="name" property="name"/>
-        </collection>
+        <collection property="roles" ofType="Role" column="id" select="eon.mapper.RoleMapper.getRoleByEmployee"
+                    fetchType="eager"/>
     </resultMap>
 
     <select id="selectPageByCondition" resultMap="getDeptName">
-        SELECT e.*,d.name dept_name,r.id role_id,r.name role_name
+        SELECT e.*,d.name dept_name
         FROM employee e LEFT JOIN department d ON d.id = e.dept_id
-        LEFT JOIN employee_role er ON er.employee_id = e.id
-        LEFT JOIN role r ON r.id = er.role_id
         <include refid="condition"/>
         <if test="rows > 0">
             LIMIT #{startIndex},#{rows}
@@ -89,7 +85,7 @@
 
 
     <select id="listForDept" resultType="Employee">
-        SELECT id,realName FROM employee WHERE state = true
+        SELECT id,realName,username FROM employee WHERE state = true
     </select>
 
     <update id="saveLoginIdForEmp">

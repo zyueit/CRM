@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eon.mapper.PotentialCustomerMapper">
+
+     <resultMap id="map" type="PotentialCustomer">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="age" property="age"/>
+            <result column="gender" property="gender"/>
+            <result column="tel" property="tel"/>
+            <result column="email" property="email"/>
+            <result column="qq" property="qq"/>
+            <result column="wechat" property="wechat"/>
+            <result column="inputTime" property="inputTime"/>
+             <association property="inChargeUser" select="eon.mapper.EmployeeMapper.get" column="inChargeUser"
+                                             javaType="Employee" fetchType="eager"/>
+             <association property="inputUser" select="eon.mapper.EmployeeMapper.get" column="inputUser"
+                                             javaType="Employee" fetchType="eager"/>
+            <association property="job" select="eon.mapper.SystemDictionaryItemMapper.get" column="job"
+                                 javaType="SystemDictionaryItem" fetchType="eager"/>
+             <association property="salaryLevel" select="eon.mapper.SystemDictionaryItemMapper.get" column="salaryLevel"
+                                             javaType="SystemDictionaryItem" fetchType="eager"/>
+     </resultMap>
+
+    <update id="approve">
+    update potentialCustomer set state = ${state} where id = #{id}
+    </update>
+
+    <update id="deliver">
+    update potentialCustomer set inChargeUser = #{inChargeUser.id} where id = #{id}
+    </update>
+
+
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO potentialCustomer (name,age,gender,tel,email,qq,wechat,job,salaryLevel,customerSource,inputTime,inputUser,state,inChargeUser)
+        VALUES
+        (#{name},#{age},#{gender},#{tel},#{email},#{qq},#{wechat},#{job.id},#{salaryLevel.id},#{customerSource},#{inputTime},#{inputUser.id},#{state},#{inChargeUser.id})
+    </insert>
+
+    <select id="get" resultType="PotentialCustomer">
+        SELECT * FROM PotentialCustomer WHERE id = #{id}
+    </select>
+
+
+    <update id="update">
+        UPDATE potentialCustomer SET name = #{name},age = #{age},gender = #{gender},tel = #{tel},email = #{email},qq = #{qq},wechat = #{wechat},job = #{job.id},salaryLevel = #{salaryLevel.id},customerSource = #{customerSource} where id = #{id}
+    </update>
+
+
+    <sql id="condition">
+            <where>
+                       <if test="keyword != null">
+                           name LIKE CONCAT("%",#{keyword},"%")
+                       </if>
+                       <if test="uid > 0">
+                            and inChargeUser = #{uid}
+                       </if>
+                       </where>
+    </sql>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(id) FROM PotentialCustomer
+        <include refid="condition"/>
+    </select>
+
+
+    <select id="list" resultMap="map">
+        SELECT * FROM PotentialCustomer
+        <include refid="condition"/>
+        <if test="rows > 0">
+            LIMIT #{startIndex},#{rows}
+        </if>
+    </select>
+
+
+</mapper>

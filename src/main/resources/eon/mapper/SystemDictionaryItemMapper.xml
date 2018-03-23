@@ -14,4 +14,8 @@
     <update id="update">
         UPDATE systemdictionaryitem SET name = #{name},intro = #{intro} WHERE id = #{id}
     </update>
+
+    <select id="get" resultType="SystemDictionaryItem">
+        SELECT * from SystemDictionaryItem where id = #{id}
+    </select>
 </mapper>
