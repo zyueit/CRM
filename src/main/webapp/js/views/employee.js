@@ -36,43 +36,43 @@ $(function () {
                 title: '用户名',
                 field: 'username',
                 align: 'center',
-                width: 1
+                width: 20
             }, {
                 title: '真实名字',
                 field: 'realName',
                 align: 'center',
-                width: 1
+                width: 20
             }, {
                 title: '联系电话',
                 field: 'tel',
                 align: 'center',
-                width: 1
+                width: 20
             }, {
                 title: '邮箱',
                 field: 'email',
                 align: 'center',
-                width: 1
+                width: 20
             }, {
                 title: '部门',
                 field: 'dept',
                 align: 'center',
-                width: 1,
+                width: 20,
                 formatter: deptFormatter
             }, {
                 title: '角色',
                 field: 'rolesName',
                 align: 'center',
-                width: 1,
+                width: 20,
             }, {
                 title: '入职时间',
                 field: 'inputTime',
                 align: 'center',
-                width: 1
+                width: 20
             }, {
                 title: '状态',
                 field: 'state',
                 align: 'center',
-                width: 1,
+                width: 20,
                 formatter: stateFormatter
             }
         ]]

@@ -53,4 +53,9 @@
     <delete id="handleRelationToDeleteForEmp">
         DELETE FROM employee_role WHERE role_id = #{rid}
     </delete>
+
+
+    <select id="getRoleByEmployee" resultType="Role">
+        select * from role where id in (select role_id from employee_role where employee_id = #{id});
+    </select>
 </mapper>
