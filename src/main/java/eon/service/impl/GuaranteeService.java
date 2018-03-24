@@ -1,7 +1,5 @@
 package eon.service.impl;
 
-import com.sun.tools.corba.se.idl.ParameterGen;
-import eon.domain.DepositOrder;
 import eon.domain.Guarantee;
 import eon.mapper.GuaranteeMapper;
 import eon.page.PageResult;
@@ -9,8 +7,6 @@ import eon.query.GuaranteeQueryObject;
 import eon.service.IGuaranteeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class GuaranteeService implements IGuaranteeService {

@@ -3,8 +3,33 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="eon.mapper.SystemLogMapper">
+    <resultMap id="log" type="SystemLog">
+        <id column="id" property="id"/>
+        <result column="opTime" property="opTime"/>
+        <result column="opIp" property="opIp"/>
+        <result column="function" property="function"/>
+        <result column="params" property="params"/>
+        <association property="opUser" column="opUser_id" select="eon.mapper.EmployeeMapper.get"
+        javaType="Employee" fetchType="eager"/>
+    </resultMap>
+
+
     <insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO systemlog (opUser_id,opTime,opIp,function,params)
         VALUES (#{opUser.id},#{opTime},#{opIp},#{function},#{params})
     </insert>
+
+    <sql id="condition">
+    </sql>
+
+    <select id="count" resultType="long">
+        SELECT count(id) FROM SystemLog
+        <include refid="condition"/>
+    </select>
+
+    <select id="query" resultMap="log">
+        SELECT * FROM SystemLog
+        <include refid="condition"/>
+        limit #{startIndex},#{rows}
+    </select>
 </mapper>
