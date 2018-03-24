@@ -10,7 +10,6 @@ $(function () {
 
     //数据表格初始化
     employeeDatagrid.datagrid({
-        title: '员工管理',
         url: '/employee_selectByCondition',
         fit: true,
         rownumbers: true,

@@ -2,12 +2,12 @@ package eon.service.impl;
 
 import eon.domain.Employee;
 import eon.domain.PotentialCustomer;
-import eon.mapper.PotentialCustomerMapper;
+import eon.mapper.CustomerMapper;
 import eon.page.PageResult;
+import eon.query.CustomerQueryObject;
 import eon.query.PotentialCustomerQueryObject;
-import eon.service.IPotentialCustomerService;
+import eon.service.ICustomerService;
 import eon.util.UserContext;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +15,9 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class PotentialCustomerService implements IPotentialCustomerService {
+public class CustomerService implements ICustomerService{
     @Autowired
-    private PotentialCustomerMapper potentialCustomerMapper;
+    private CustomerMapper customerMapper;
 
 
     @Override
@@ -27,39 +27,39 @@ public class PotentialCustomerService implements IPotentialCustomerService {
         potentialCustomer.setState(0);
         potentialCustomer.setInputUser(emp);
         potentialCustomer.setInChargeUser(emp);
-        potentialCustomerMapper.save(potentialCustomer);
+        customerMapper.save(potentialCustomer);
     }
 
     @Override
     public PotentialCustomer get(Long id) {
-        return potentialCustomerMapper.get(id);
+        return customerMapper.get(id);
     }
 
 
     @Override
     public void update(PotentialCustomer potentialCustomer) {
-        potentialCustomerMapper.update(potentialCustomer);
+        customerMapper.update(potentialCustomer);
     }
 
     @Override
     public void deliver(PotentialCustomer potentialCustomer) {
-        potentialCustomerMapper.deliver(potentialCustomer);
+        customerMapper.deliver(potentialCustomer);
     }
 
     @Override
-    public PageResult<PotentialCustomer> query(PotentialCustomerQueryObject qo) {
+    public PageResult<PotentialCustomer> query(CustomerQueryObject qo) {
 
-        int totalCount = potentialCustomerMapper.count(qo).intValue();
+        int totalCount = customerMapper.count(qo).intValue();
         if (totalCount == 0) {
             return PageResult.empty();
         }
-        List<PotentialCustomer> result = potentialCustomerMapper.list(qo);
+        List<PotentialCustomer> result = customerMapper.list(qo);
         return new PageResult<>(totalCount, result);
     }
 
     @Override
     public void approve(Long id, Long state) {
-        potentialCustomerMapper.approve(id, state);
+        customerMapper.approve(id, state);
     }
 
 }
