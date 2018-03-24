@@ -16,7 +16,7 @@
     <script type="text/javascript" src="/js/plugins/jquery-easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="/js/plugins/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="/js/plugins/jquery-easyui/base.js"></script>
-    <script type="text/javascript" src="/js/views/potentialCustomer.js"></script>
+    <script type="text/javascript" src="/js/views/customer.js"></script>
 </head>
 <body>
 <!-- 数据表格 -->
@@ -24,28 +24,26 @@
 <!-- datagrid工具栏按钮 -->
 <div id="datagrid_btn">
     <div style="display: inline-block">
-        <%--<c:if test="${myFn:checkPermission('eon.web.controller.Controller:save')}">--%>
-        <a class="easyui-linkbutton" iconCls="icon-add" plain="true" data-cmd="add">新增</a>
-        <%--</c:if>--%>
         <%--<c:if test="${myFn:checkPermission('eon.web.controller.Controller:update')}">--%>
         <a class="easyui-linkbutton" id="Edit" iconCls="icon-edit" plain="true" data-cmd="edit">编辑</a>
         <a class="easyui-linkbutton" id="Edit" iconCls="icon-tip" plain="true" data-cmd="deliver">共享</a>
         <a class="easyui-linkbutton" id="Edit" iconCls="icon-tip" plain="true" data-cmd="deliver">移交</a>
         <%--</c:if>--%>
         <%--<c:if test="${myFn:checkPermission('eon.web.controller.Controller:disable')}">--%>
-        <a class="easyui-linkbutton" id="Remove" iconCls="icon-remove" plain="true" data-cmd="del">开发失败</a>
+        <a class="easyui-linkbutton" id="Remove" iconCls="icon-no" plain="true" data-cmd="away">流失</a>
         <%--</c:if>--%>
         <a class="easyui-linkbutton" iconCls="icon-reload" plain="true" data-cmd="refresh">刷新</a>
-        <a class="easyui-linkbutton" iconCls="icon-ok" plain="true" data-cmd="approve">转正</a>
+        <a class="easyui-linkbutton" iconCls="icon-reload" plain="true" data-cmd="refresh">移交資源池</a>
+        <%--<a class="easyui-linkbutton" iconCls="icon-ok" plain="true" data-cmd="approve">转正</a>--%>
     </div>
     <div style="display: inline-block;float: right;margin-right: 20px;">
         <form id="search_form">
             关键字<input name="keyword">
             状态
             <select name="state">
-                <option value="-5">全部</option>
-                <option value="0">潜在客户</option>
-                <option value="-1">开发失败</option>
+                <option value="-6">全部</option>
+                <option value="1">正式客户</option>
+                <option value="-2">流失客户</option>
             </select>
             <a class="easyui-linkbutton" iconCls="icon-search" data-cmd="querySearch">查询</a>
         </form>

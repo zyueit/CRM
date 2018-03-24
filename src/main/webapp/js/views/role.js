@@ -9,7 +9,6 @@ $(function () {
 
     //数据表格初始化
     roleDatagrid.datagrid({
-        title: '角色管理',
         url: '/role_selectByCondition',
         fit: true,
         rownumbers: true,
@@ -35,17 +34,17 @@ $(function () {
                 title: '角色编码',
                 field: 'sn',
                 align: 'center',
-                width: 1
+                width: 20
             }, {
                 title: '角色名称',
                 field: 'name',
                 align: 'center',
-                width: 1
+                width: 20
             }, {
                 title: '权限',
                 field: 'permissionsName',
                 align: 'center',
-                width: 1
+                width: 20
             }, {
                 title: '状态',
                 field: 'state',
@@ -57,7 +56,7 @@ $(function () {
                     }
                 },
                 align: 'center',
-                width: 1
+                width: 20
             }
         ]]
     });
@@ -65,7 +64,7 @@ $(function () {
     roleDialog.dialog({
         width: 600,
         height: 400,
-        top: 200,
+        top: 50,
         modal: true,
         closed: true,
         doSize: true,

@@ -6,10 +6,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PotentialCustomerQueryObject extends QueryObject {
+public class CustomerQueryObject extends QueryObject {
     private String keyword;
 
-    private Integer state = -5;
+    private Integer state = -6;
 
     private Long uid;
 

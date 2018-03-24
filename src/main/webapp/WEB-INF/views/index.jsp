@@ -38,8 +38,8 @@
 <body>
 <div class="easyui-layout" fit="true">
     <div data-options="region:'north'"
-         style="height:100px;background: url('/img/bg.jpg') no-repeat;background-size:cover;">
-        <h1 style="position: relative;top: 30px;">客户关系管理系统</h1>
+         style="height:70px;background: url('/img/bg.jpg') no-repeat;background-size:cover;">
+        <h1 style="position: relative;top: 20px;">客户关系管理系统</h1>
         <div id="top">
             <div id="top_links">
                 <div style="float: right;width: 200px;margin-top: 10px;">
