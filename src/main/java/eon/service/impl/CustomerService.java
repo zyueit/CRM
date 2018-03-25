@@ -5,7 +5,6 @@ import eon.domain.PotentialCustomer;
 import eon.mapper.CustomerMapper;
 import eon.page.PageResult;
 import eon.query.CustomerQueryObject;
-import eon.query.PotentialCustomerQueryObject;
 import eon.service.ICustomerService;
 import eon.util.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
