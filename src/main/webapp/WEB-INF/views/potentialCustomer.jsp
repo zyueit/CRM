@@ -29,7 +29,7 @@
         <%--</c:if>--%>
         <%--<c:if test="${myFn:checkPermission('eon.web.controller.Controller:update')}">--%>
         <a class="easyui-linkbutton" id="Edit" iconCls="icon-edit" plain="true" data-cmd="edit">编辑</a>
-        <a class="easyui-linkbutton" id="Edit" iconCls="icon-tip" plain="true" data-cmd="deliver">共享</a>
+        <a class="easyui-linkbutton" id="Edit" iconCls="icon-tip" plain="true" data-cmd="share">共享</a>
         <a class="easyui-linkbutton" id="Edit" iconCls="icon-tip" plain="true" data-cmd="deliver">移交</a>
         <%--</c:if>--%>
         <%--<c:if test="${myFn:checkPermission('eon.web.controller.Controller:disable')}">--%>
@@ -109,6 +109,7 @@
 <div id="deliverDialog">
     <form id="deliver_form" method="post">
         <table style="margin-top:30px;padding-left: 125px;">
+            <input type="hidden" name="cmd">
             <tr>
                 <td>当前潜在客户:</td>
             </tr>

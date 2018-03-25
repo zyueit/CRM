@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eon.mapper.CustomerTransferMapper">
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO customerTransfer (customer_id, transUser_id, transTime, oldSeller_id, newSeller_id)
+        VALUES (#{customer.id},#{transUser.id},#{transTime},#{oldSeller.id},#{newSeller.id})
+    </insert>
+    
+    <resultMap id="map" type="CustomerTransfer">
+        <id column="id" property="id"/>
+        <association property="customer" column="customer_id" select="eon.mapper.PotentialCustomerMapper.get" fetchType="eager"/>
+        <association property="transUser" column="transUser_id" select="eon.mapper.EmployeeMapper.get" fetchType="eager"/>
+        <association property="oldSeller" column="oldSeller_id" select="eon.mapper.EmployeeMapper.get" fetchType="eager"/>
+        <association property="newSeller" column="newSeller_id" select="eon.mapper.EmployeeMapper.get" fetchType="eager"/>
+    </resultMap>
+
+    <sql id="condition">
+
+    </sql>
+
+    <select id="count" resultType="long">
+        SELECT count(id) FROM customertransfer
+        <include refid="condition"/>
+    </select>
+
+    <select id="query" resultMap="map">
+        SELECT * from customertransfer
+        <include refid="condition"/>
+        limit #{startIndex},#{rows}
+    </select>
+
+</mapper>
