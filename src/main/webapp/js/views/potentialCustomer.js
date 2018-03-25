@@ -253,13 +253,35 @@ $(function () {
         deliver: function () {
             var select = Datagrid.datagrid("getSelected");
             if (select) {
-                deliver_form.form("clear");
-                deliverDialog.dialog("setTitle", "编辑信息");
-                select['inChargeUser'] = select.inChargeUser.username;
-                deliver_form.form("load", select);
-                deliverDialog.dialog("open");
+                if (select.state != -1) {
+                    deliver_form.form("clear");
+                    deliverDialog.dialog("setTitle", "编辑信息");
+                    select['inChargeUser'] = select.inChargeUser.username;
+                    deliver_form.form("load", select);
+                    deliverDialog.dialog("open");
+                    $("input[name=cmd]").val("deliver");
+                } else {
+                    $.messager.alert("温馨提示", "此客戶已开发失败！");
+                }
             } else {
                 $.messager.alert("温馨提示", "请选择要移交的客户！");
+            }
+        }, /** 客户共享 */
+        share: function () {
+            var select = Datagrid.datagrid("getSelected");
+            if (select) {
+                if (select.state != -1) {
+                    deliver_form.form("clear");
+                    deliverDialog.dialog("setTitle", "编辑信息");
+                    select['inChargeUser'] = select.inChargeUser.username;
+                    deliver_form.form("load", select);
+                    deliverDialog.dialog("open");
+                    $("input[name=cmd]").val("share");
+                } else {
+                    $.messager.alert("温馨提示", "此客戶已开发失败！");
+                }
+            } else {
+                $.messager.alert("温馨提示", "请选择要共享的客户！");
             }
         },
         /** 开发失败 */
@@ -323,16 +345,16 @@ $(function () {
             var select = Datagrid.datagrid("getSelected");
             if (select) {
                 var data = deliver_form.serializeArray()
-                var sid = data[2]['value'];
+                var sid = data[3]['value'];
                 if (sid) {
-                    $.get("/potentialCustomer_deliver?inChargeUser.id=" + sid + "&id=" + select.id, function (data) {
+                    $.get("/potentialCustomer_" + data[0]['value'] + "?inChargeUser.id=" + sid + "&id=" + select.id, function (data) {
                         if (data.success) {
                             $.messager.alert("温馨提示", data.msg);
                             deliverDialog.dialog("close");
-                            Datagrid.datagrid("reload");
                         } else {
                             $.messager.alert("温馨提示", data.msg);
                         }
+                        Datagrid.datagrid("reload");
                     }, "json");
                 } else {
                     $.messager.alert("温馨提示", "请选择接收人!");

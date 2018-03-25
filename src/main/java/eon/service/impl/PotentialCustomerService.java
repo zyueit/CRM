@@ -1,5 +1,6 @@
 package eon.service.impl;
 
+import eon.domain.CustomerTransfer;
 import eon.domain.Employee;
 import eon.domain.PotentialCustomer;
 import eon.mapper.PotentialCustomerMapper;
@@ -11,6 +12,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
+import java.net.HttpCookie;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +21,6 @@ import java.util.List;
 public class PotentialCustomerService implements IPotentialCustomerService {
     @Autowired
     private PotentialCustomerMapper potentialCustomerMapper;
-
 
     @Override
     public void save(PotentialCustomer potentialCustomer) {

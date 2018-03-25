@@ -5,6 +5,7 @@ import eon.page.PageResult;
 import eon.query.PotentialCustomerQueryObject;
 import org.apache.ibatis.annotations.Param;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public interface IPotentialCustomerService {
