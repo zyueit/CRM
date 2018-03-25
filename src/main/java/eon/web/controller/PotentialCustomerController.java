@@ -1,11 +1,12 @@
 package eon.web.controller;
 
+import eon.domain.CustomerTransfer;
 import eon.domain.Employee;
 import eon.domain.PotentialCustomer;
-import eon.domain.SystemDictionaryItem;
 import eon.page.AjaxResult;
 import eon.page.PageResult;
 import eon.query.PotentialCustomerQueryObject;
+import eon.service.ICustomerTransferService;
 import eon.service.IPotentialCustomerService;
 import eon.util.UserContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 @Controller
 public class PotentialCustomerController {
     @Autowired
     private IPotentialCustomerService potentialCustomerService;
+    @Autowired
+    private ICustomerTransferService customerTransferService;
 
     @RequestMapping("/potentialCustomer")
     public String index() {
@@ -73,13 +77,35 @@ public class PotentialCustomerController {
             return new AjaxResult("异常，请联系管理员！");
         }
     }
+
     //移交功能
     @RequestMapping("/potentialCustomer_deliver")
     @ResponseBody
-    public AjaxResult deliver(PotentialCustomer potentialCustomer) {
+    public AjaxResult deliver(PotentialCustomer potentialCustomer, HttpSession session) {
         try {
+            CustomerTransfer customerTransfer = new CustomerTransfer();
+            customerTransfer.setCustomer(potentialCustomer);//客户
+            customerTransfer.setTransTime(new Date());//移交时间
+            customerTransfer.setTransUser((Employee) session.getAttribute(UserContext.USER_IN_SESSION));//移交人
+            Employee inChargeUser = potentialCustomerService.get(potentialCustomer.getId()).getInChargeUser();
+            customerTransfer.setOldSeller(inChargeUser);//老负责人
+            customerTransfer.setNewSeller(potentialCustomer.getInChargeUser());//新负责人
+            customerTransferService.save(customerTransfer);
             potentialCustomerService.deliver(potentialCustomer);
             return new AjaxResult(true, "移交成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new AjaxResult("异常，请联系管理员！");
+        }
+    }
+
+    //共享功能
+    @RequestMapping("/potentialCustomer_share")
+    @ResponseBody
+    public AjaxResult share(PotentialCustomer customer) {
+        try {
+            potentialCustomerService.deliver(customer);
+            return new AjaxResult(true, "共享成功！");
         } catch (Exception e) {
             e.printStackTrace();
             return new AjaxResult("异常，请联系管理员！");

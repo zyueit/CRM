@@ -40,7 +40,7 @@
         (#{name},#{age},#{gender},#{tel},#{email},#{qq},#{wechat},#{job.id},#{salaryLevel.id},#{customerSource},#{inputTime},#{inputUser.id},#{state},#{inChargeUser.id})
     </insert>
 
-    <select id="get" resultType="PotentialCustomer">
+    <select id="get" resultMap="map">
         SELECT * FROM PotentialCustomer WHERE id = #{id}
     </select>
 
