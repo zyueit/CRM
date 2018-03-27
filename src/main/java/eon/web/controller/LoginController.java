@@ -3,6 +3,7 @@ package eon.web.controller;
 import eon.domain.Employee;
 import eon.domain.Menu;
 import eon.domain.Permission;
+import eon.domain.Role;
 import eon.page.AjaxResult;
 import eon.service.IEmployeeService;
 import eon.service.IMenuService;
@@ -61,6 +62,8 @@ public class LoginController {
                 }
             }
             session.setAttribute(UserContext.MENUS_IN_SESSION, menus);
+            List<Role> roles = user.getRoles();
+            session.setAttribute(UserContext.ROLES_IN_SESSION, roles);
             result = new AjaxResult(true, "登陆成功！");
         } else {
             result = new AjaxResult("账号或密码有误，请重新输入！");

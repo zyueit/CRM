@@ -6,23 +6,28 @@ import eon.util.StringUtil;
 import eon.util.UserContext;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 @Getter
 @Setter
-public class CustomerQueryObject extends QueryObject {
+@ToString
+public class PotentialChartQueryObejct extends QueryObject {
     private String keyword;
-
-    private Integer state = -6;
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date beginTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date endTime;
+    private String groupBy = "月份";
     private Long uid;
 
     public String getKeyword() {
-        return StringUtil.isbank(keyword) ? null : keyword;
+        return !StringUtil.isbank(keyword) ? keyword : null;
     }
-
     public Long getUid() {
         HttpSession session = UserContext.getRequest().getSession();
         Employee e = (Employee) session.getAttribute(UserContext.USER_IN_SESSION);
@@ -37,4 +42,5 @@ public class CustomerQueryObject extends QueryObject {
         }
         return this.uid;
     }
+
 }

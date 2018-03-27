@@ -30,8 +30,9 @@ private PotentialCustomerMapper potentialCustomerMapper;
     @Test
     public void list() {
         PotentialCustomerQueryObject qo = new PotentialCustomerQueryObject();
-//        List<PotentialCustomer> list = potentialCustomerMapper.list(qo);
-//        System.out.println(list);
+        qo.setUid(-5l);
+        List<PotentialCustomer> list = potentialCustomerMapper.list(qo);
+        System.out.println(list);
     }
 
     @Test

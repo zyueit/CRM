@@ -3,7 +3,25 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="eon.mapper.EmployeeMapper">
-    <select id="loginCheck" resultType="Employee">
+    <resultMap id="getDeptName" type="Employee">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="realName" property="realName"/>
+        <result column="password" property="password"/>
+        <result column="tel" property="tel"/>
+        <result column="email" property="email"/>
+        <result column="inputTime" property="inputTime"/>
+        <result column="state" property="state"/>
+        <result column="admin" property="admin"/>
+        <association property="dept" columnPrefix="dept_" javaType="Department">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+        <collection property="roles" ofType="Role" column="id" select="eon.mapper.RoleMapper.getRoleByEmployee"
+                    fetchType="eager"/>
+    </resultMap>
+
+    <select id="loginCheck" resultMap="getDeptName">
         SELECT * FROM employee WHERE username = #{username} AND password = #{password} AND state = true
     </select>
 
@@ -56,23 +74,7 @@
         <include refid="condition"/>
     </select>
 
-    <resultMap id="getDeptName" type="Employee">
-        <id column="id" property="id"/>
-        <result column="username" property="username"/>
-        <result column="realName" property="realName"/>
-        <result column="password" property="password"/>
-        <result column="tel" property="tel"/>
-        <result column="email" property="email"/>
-        <result column="inputTime" property="inputTime"/>
-        <result column="state" property="state"/>
-        <result column="admin" property="admin"/>
-        <association property="dept" columnPrefix="dept_" javaType="Department">
-            <id column="id" property="id"/>
-            <result column="name" property="name"/>
-        </association>
-        <collection property="roles" ofType="Role" column="id" select="eon.mapper.RoleMapper.getRoleByEmployee"
-                    fetchType="eager"/>
-    </resultMap>
+
 
     <select id="selectPageByCondition" resultMap="getDeptName">
         SELECT e.*,d.name dept_name

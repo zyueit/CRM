@@ -76,9 +76,6 @@
     <select id="list" resultMap="map">
         SELECT * FROM PotentialCustomer
         <include refid="condition"/>
-        <if test="rows > 0">
-            LIMIT #{startIndex},#{rows}
-        </if>
     </select>
 
 

@@ -8,7 +8,6 @@ $(function () {
     datagird.datagrid({
         fit: true,
         fitColumns: true,
-        title: '保修单',
         url: '/guarantee_list',
         pagination: true,
         loadMsg: '正在努力加载...',

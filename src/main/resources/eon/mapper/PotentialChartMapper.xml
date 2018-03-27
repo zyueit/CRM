@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eon.mapper.PotentialChartMapper">
+
+    <sql id="condition">
+        <where>
+            <!--<if test="uid > 0">-->
+            <!--and inChargeUser = #{uid}-->
+            <!--</if>-->
+            <if test="keyword != null">
+                AND e.username LIKE concat("%",#{keyword},"%")
+            </if>
+            <if test="beginTime != null">
+                AND p.inputTime &gt;= #{beginTime}
+            </if>
+            <if test="endTime != null">
+                AND p.inputTime &lt;= #{endTime}
+            </if>
+            <if test="uid > 0">
+                and inChargeUser = #{uid}
+            </if>
+        </where>
+    </sql>
+
+    <sql id="time">
+        <if test="groupBy == '月份'">
+            date_format(p.inputTime,"%Y-%m")
+        </if>
+        <if test="groupBy == '年份'">
+            date_format(p.inputTime,"%Y")
+        </if>
+    </sql>
+
+
+    <select id="query" resultType="eon.vo.PotentialVO">
+        select e.username username,
+        <include refid="time"/>
+        inputTime,count(p.name) customerCount
+        from potentialCustomer p
+        left join employee e
+        on p.inChargeUser = e.id
+        <include refid="condition"/>
+        group by inChargeUser,
+        <include refid="time"/>
+        order by
+        inputTime;
+    </select>
+</mapper>

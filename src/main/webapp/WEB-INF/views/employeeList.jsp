@@ -37,7 +37,7 @@
         </c:if>
         <a class="easyui-linkbutton" iconCls="icon-reload" plain="true" data-cmd="refresh">刷新</a>
     </div>
-    <div style="display: inline-block;float: right;margin-right: 20px;">
+
         <form id="search_form">
             关键字<input name="keyword">
             入职时间<input name="beginTime" class="easyui-datebox">~<input name="endTime" class="easyui-datebox">
