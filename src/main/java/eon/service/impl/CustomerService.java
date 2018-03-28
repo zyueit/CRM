@@ -47,7 +47,6 @@ public class CustomerService implements ICustomerService{
 
     @Override
     public PageResult<PotentialCustomer> query(CustomerQueryObject qo) {
-
         int totalCount = customerMapper.count(qo).intValue();
         if (totalCount == 0) {
             return PageResult.empty();

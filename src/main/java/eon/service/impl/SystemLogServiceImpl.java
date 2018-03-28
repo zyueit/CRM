@@ -28,5 +28,4 @@ public class SystemLogServiceImpl implements ISystemLogService {
         }
         return new PageResult<>(count, systemLogMapper.query(qo));
     }
-
 }

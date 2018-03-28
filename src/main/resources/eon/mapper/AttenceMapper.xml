@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="eon.mapper.AttenceMapper">
+
+    <resultMap id="map" type="Attence">
+        <id column="id" property="id"/>
+        <result property="IP" column="IP"/>
+        <result property="state" column="state"/>
+        <result property="signInTime" column="signInTime"/>
+        <result property="signOutTime" column="signOutTime"/>
+        <result property="AddSignTime" column="AddSignTime"/>
+        <association property="AddSignUser" column="AddSignUser_id" javaType="Employee"
+                     select="eon.mapper.EmployeeMapper.get" fetchType="eager"/>
+        <association property="User" column="User_id" javaType="Employee" select="eon.mapper.EmployeeMapper.get" fetchType="eager"/>
+    </resultMap>
+
+    <insert id="save" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO attence (IP,state,signInTime,signOutTime,AddSignUser_id,User_id,AddSignTime)
+        VALUES (#{IP},#{state},#{signInTime},#{signOutTime},#{AddSignUser.id},#{User.id},#{AddSignTime});
+    </insert>
+
+    <select id="get" resultMap="map">
+        SELECT * FROM attence where id = #{id}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM attence where id = #{id}
+    </delete>
+
+    <update id="update">
+        UPDATE attence SET AddSignTime=#{AddSignTime},AddSignUser_id = #{AddSignUser.id}
+    </update>
+
+    <sql id="condition">
+
+    </sql>
+
+    <select id="count" resultType="long">
+        SELECT count(id) FROM attence
+        <include refid="condition"/>
+    </select>
+
+    <select id="list" resultMap="map">
+        SELECT * FROM attence
+        <include refid="condition"/>
+        <if test="rows > 0">
+            limit #{startIndex},#{rows}
+        </if>
+    </select>
+</mapper>
