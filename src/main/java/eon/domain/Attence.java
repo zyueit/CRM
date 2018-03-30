@@ -15,7 +15,7 @@ public class Attence {
     private Long IP;
     private Boolean state;
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "CMT+8")
-    private Date AddSignTime;
+    private Date addSignTime;
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "CMT+8")
     private Date signInTime;
     @JsonFormat(pattern = "yyyy-MM-dd",timezone = "CMT+8")
@@ -31,7 +31,7 @@ public class Attence {
                 ", state=" + state +
                 ", signInTime=" + signInTime +
                 ", signOutTime=" + signOutTime +
-                ", AddSignTime=" + AddSignTime +
+                ", AddSignTime=" + addSignTime +
                 '}';
     }
 }

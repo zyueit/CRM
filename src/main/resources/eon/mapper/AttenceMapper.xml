@@ -10,15 +10,15 @@
         <result property="state" column="state"/>
         <result property="signInTime" column="signInTime"/>
         <result property="signOutTime" column="signOutTime"/>
-        <result property="AddSignTime" column="AddSignTime"/>
+        <result property="addSignTime" column="addSignTime"/>
         <association property="AddSignUser" column="AddSignUser_id" javaType="Employee"
                      select="eon.mapper.EmployeeMapper.get" fetchType="eager"/>
         <association property="User" column="User_id" javaType="Employee" select="eon.mapper.EmployeeMapper.get" fetchType="eager"/>
     </resultMap>
 
     <insert id="save" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
-        INSERT INTO attence (IP,state,signInTime,signOutTime,AddSignUser_id,User_id,AddSignTime)
-        VALUES (#{IP},#{state},#{signInTime},#{signOutTime},#{AddSignUser.id},#{User.id},#{AddSignTime});
+        INSERT INTO attence (IP,state,signInTime,signOutTime,AddSignUser_id,User_id,addSignTime)
+        VALUES (#{IP},#{state},#{signInTime},#{signOutTime},#{AddSignUser.id},#{User.id},#{addSignTime});
     </insert>
 
     <select id="get" resultMap="map">
@@ -30,7 +30,7 @@
     </delete>
 
     <update id="update">
-        UPDATE attence SET AddSignTime=#{AddSignTime},AddSignUser_id = #{AddSignUser.id}
+        UPDATE attence SET addSignTime=#{addSignTime},AddSignUser_id = #{AddSignUser.id}
     </update>
 
     <sql id="condition">
