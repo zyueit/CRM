@@ -20,8 +20,12 @@
 </head>
 <body>
 <%--数据表--%>
-<table id="datagird"></table>
+<table id="datagrid"></table>
 <div id="button" align="right">
+    <form id="form" action="/attence_down" method="post">
+        <input type="hidden" name="data"/>
+        <%--<input type="submit">--%>
+    </form>
     <a class="easyui-linkbutton" iconCls="icon-save" plain="true" data-cmd="produce">导出</a>
 </div>
 </body>
